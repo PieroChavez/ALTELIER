@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import './Testimoniales.css';
 
 const testimonials = [
     {

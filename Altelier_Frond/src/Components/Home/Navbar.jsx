@@ -3,6 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import { LoginButton } from '../Buttons/LoginButton';
 
 function NavbarComponent() {
   return (
@@ -30,7 +31,8 @@ function NavbarComponent() {
             </NavDropdown>
             <Nav.Link href="/contact">Contact</Nav.Link>
           </Nav>
-          <Button variant="outline-primary" href="/login">Login</Button>
+        
+          <LoginButton/>
         </Navbar.Collapse>
       </Container>
     </Navbar>
