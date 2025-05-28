@@ -1,5 +1,6 @@
 'use client'
 
+import LogoScroll from '../../assets/LogosScroll/LogoScroll'
 import { Fragment, useState } from 'react'
 import {
   Dialog,
@@ -165,7 +166,7 @@ export default function NavbarHome() {
                 className="relative -m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400"
               >
                 <span className="absolute -inset-0.5" />
-                <span className="sr-only">Close menu</span>
+                <span className="sr-only">Cerrar menu</span>
                 <XMarkIcon aria-hidden="true" className="size-6" />
               </button>
             </div>
@@ -243,7 +244,7 @@ export default function NavbarHome() {
             <div className="space-y-6 border-t border-gray-200 px-4 py-6">
               <div className="flow-root">
                 <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
-                  Sign in
+                  Iniciar 
                 </a>
               </div>
               <div className="flow-root">
@@ -270,7 +271,7 @@ export default function NavbarHome() {
 
       <header className="relative bg-white">
         <p className="flex h-10 items-center justify-center bg-indigo-600 px-4 text-sm font-medium text-white sm:px-6 lg:px-8">
-          Get free delivery on orders over $100
+          Recive gratis tu primer taller o bolsa de cafe por registrate
         </p>
 
         <nav aria-label="Top" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -288,11 +289,11 @@ export default function NavbarHome() {
 
               {/* Logo */}
               <div className="ml-4 flex lg:ml-0">
-                <a href="#">
-                  <span className="sr-only">Your Company</span>
+                <a href="/">
+                  <span className="sr-only">Altelier</span>
                   <img
-                    alt=""
-                    src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
+                    alt={LogoScroll[0].alt}
+                    src={LogoScroll[0].image}
                     className="h-8 w-auto"
                   />
                 </a>

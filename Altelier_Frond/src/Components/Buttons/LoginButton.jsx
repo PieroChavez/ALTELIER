@@ -23,7 +23,7 @@ export const LoginButton = ({...props}) => {
       {...props}
       onClick={handleAuthAction}
       
-      variant= "outline-primary"                
+      variant= "outline-primary"              
     >
       
       
