@@ -1,97 +1,150 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import { createTheme } from '@mui/material/styles';
-import DescriptionIcon from '@mui/icons-material/Description';
-import FolderIcon from '@mui/icons-material/Folder';
-import { AppProvider } from '@toolpad/core/AppProvider';
-import { DashboardLayout } from '@toolpad/core/DashboardLayout';
-import { DemoProvider, useDemoRouter } from '@toolpad/core/internal';
+import { Box, useMediaQuery, Typography } from "@mui/material";
+// import { useSelector } from "react-redux"; // 🔴 No se usará porque no hay conexión al backend
+// import Navbar from "scenes/navbar"; // 🔴 No se usará en esta versión visual
+// import UserWidget from "scenes/widgets/UserWidget"; // 🔴 Reemplazado por componente simulado
+// import MyPostWidget from "scenes/widgets/MyPostWidget"; // 🔴 Reemplazado por input simulado
+// import PostsWidget from "scenes/widgets/PostsWidget"; // 🔴 Reemplazado por publicaciones falsas
+// import AdvertWidget from "scenes/widgets/AdvertWidget"; // 🔴 Reemplazado
+// import FriendListWidget from "scenes/widgets/FriendListWidget"; // 🔴 Reemplazado
 
-const demoTheme = createTheme({
-  cssVariables: {
-    colorSchemeSelector: 'data-toolpad-color-scheme',
-  },
-  colorSchemes: { light: true, dark: true },
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 600,
-      md: 600,
-      lg: 1200,
-      xl: 1536,
+const Home = () => {
+  const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
+
+
+
+  const nombreUsuario = localStorage.getItem("nombre") || "Nombre no disponible";
+  const rolUsuario = localStorage.getItem("rol") || "Rol no disponible";
+
+  // Simulamos datos de usuario
+  const user = {
+    _id: "abc123",
+    picturePath: "https://i.pravatar.cc/150?img=5",
+    name: nombreUsuario,
+  rol: rolUsuario,
+  };
+
+  // Simulamos publicaciones
+  const posts = [
+    {
+      id: 1,
+      user: "Carlos Ríos",
+      content: "Hoy preparé un Chemex increíble 🤎 #coffeeLovers",
     },
-  },
-});
+    {
+      id: 2,
+      user: "Valeria Pérez",
+      content: "El arte latte es una pasión 🎨☕️",
+    },
+  ];
 
-function DemoPageContent({ pathname }) {
   return (
-    <Box
-      sx={{
-        py: 4,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        textAlign: 'center',
-      }}
-    >
-      <Typography>Dashboard content for {pathname}</Typography>
+    <Box>
+      {/* <Navbar /> 🔴 Se comenta para vista visual únicamente */}
+
+      <Box
+        width="100%"
+        padding="2rem 6%"
+        display={isNonMobileScreens ? "flex" : "block"}
+        gap="0.5rem"
+        justifyContent="space-between"
+      >
+        {/* 🟢 Columna izquierda: UserWidget simulado */}
+        <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
+          <Box
+            p="1rem"
+            bgcolor="#f9fafb"
+            borderRadius="1rem"
+            boxShadow="0 0 10px rgba(0,0,0,0.1)"
+            textAlign="center"
+          >
+            <img
+              src={user.picturePath}
+              alt="Usuario"
+              style={{ borderRadius: "50%", width: "80px", marginBottom: "1rem" }}
+            />
+            <Typography variant="h6">{user.name}</Typography>
+            <Typography variant="body2" color="textSecondary">
+              Barista Creativa
+            </Typography>
+          </Box>
+        </Box>
+
+        {/* 🟢 Columna central: input para nueva publicación + posts simulados */}
+        <Box
+          flexBasis={isNonMobileScreens ? "42%" : undefined}
+          mt={isNonMobileScreens ? undefined : "2rem"}
+        >
+          <Box
+            p="1rem"
+            bgcolor="#ffffff"
+            borderRadius="1rem"
+            mb="1rem"
+            boxShadow="0 0 10px rgba(0,0,0,0.1)"
+          >
+            <Typography variant="h6">¿Qué estás pensando?</Typography>
+            <input
+              type="text"
+              placeholder="Comparte algo sobre café..."
+              style={{
+                marginTop: "0.5rem",
+                width: "100%",
+                padding: "0.75rem",
+                borderRadius: "0.5rem",
+                border: "1px solid #ccc",
+              }}
+            />
+          </Box>
+
+          {/* Publicaciones simuladas */}
+          {posts.map((post) => (
+            <Box
+              key={post.id}
+              p="1rem"
+              bgcolor="#f0f0f0"
+              borderRadius="1rem"
+              mb="1rem"
+              boxShadow="0 0 5px rgba(0,0,0,0.05)"
+            >
+              <Typography variant="subtitle1" fontWeight="bold">
+                {post.user}
+              </Typography>
+              <Typography variant="body1">{post.content}</Typography>
+            </Box>
+          ))}
+        </Box>
+
+        {/* 🟢 Columna derecha: Anuncios y amigos simulados (solo en pantallas grandes) */}
+        {isNonMobileScreens && (
+          <Box flexBasis="26%">
+            <Box
+              p="1rem"
+              bgcolor="#fff3cd"
+              borderRadius="1rem"
+              boxShadow="0 0 10px rgba(0,0,0,0.1)"
+              mb="2rem"
+            >
+              <Typography variant="h6">Anuncio</Typography>
+              <Typography variant="body2">
+                ¡Nuevo curso de barismo nivel intermedio! ✨
+              </Typography>
+            </Box>
+
+            <Box
+              p="1rem"
+              bgcolor="#d1fae5"
+              borderRadius="1rem"
+              boxShadow="0 0 10px rgba(0,0,0,0.1)"
+            >
+              <Typography variant="h6">Amigos</Typography>
+              <Typography variant="body2">Lucía Vargas</Typography>
+              <Typography variant="body2">Diego Rojas</Typography>
+              <Typography variant="body2">Laura Jiménez</Typography>
+            </Box>
+          </Box>
+        )}
+      </Box>
     </Box>
   );
-}
-
-DemoPageContent.propTypes = {
-  pathname: PropTypes.string.isRequired,
 };
 
-// ✅ Cambiado de "DashboardLayoutNavigationNested" a "Home"
-function Home(props) {
-  const { window } = props;
-
-  const router = useDemoRouter('/movies/lord-of-the-rings');
-
-  // Remove this const when copying and pasting into your project.
-  const demoWindow = window !== undefined ? window() : undefined;
-
-  return (
-    // Remove this provider when copying and pasting into your project.
-    <DemoProvider window={demoWindow}>
-      <AppProvider
-        navigation={[
-          {
-            segment: 'movies',
-            title: 'Movies',
-            icon: <FolderIcon />,
-            children: [
-              {
-                segment: 'lord-of-the-rings',
-                title: 'Lord of the Rings',
-                icon: <DescriptionIcon />,
-              },
-              {
-                segment: 'harry-potter',
-                title: 'Harry Potter',
-                icon: <DescriptionIcon />,
-              },
-            ],
-          },
-        ]}
-        router={router}
-        theme={demoTheme}
-        window={demoWindow}
-      >
-        <DashboardLayout>
-          <DemoPageContent pathname={router.pathname} />
-        </DashboardLayout>
-      </AppProvider>
-    </DemoProvider>
-  );
-}
-
-Home.propTypes = {
-  window: PropTypes.func,
-};
-
-// ✅ Exportamos como "Home"
 export default Home;

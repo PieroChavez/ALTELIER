@@ -1,17 +1,10 @@
-
-//import HeaderScroll from '../Components/Header/HeaderScroll'
-//import HeaderHome from '../Components/Header/HeaderHome'
-//import HeaderNav from "../Components/Header/headernav"
-//import HeaderScroll from "../Components/Header/HeaderScroll"
-//import HeaderUno from "../Components/Header/HeaderUno"
-
+import HeaderHome from '../Components/Header/HeaderHome'
 
 const index = () => {
   return (
-    <div>          
-     {/*<HeaderHome/>*/}    
-     {/*<HeaderScroll/>*/}
-    
+    <div>   
+           
+    <HeaderHome/>
       
     </div>
   )

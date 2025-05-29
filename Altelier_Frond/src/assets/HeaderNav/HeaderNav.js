@@ -7,6 +7,8 @@ import Piero_uno from "./Piero_uno.jpg";
 import press from "./press.jpg";
 import spresso from "./spresso.jpg";
 import tt from "./tt.jpg";
+import ray from "./ray.jpg";
+import piero from "./piero.jpg";
 
 export const HeaderNavUno = [
     {
@@ -55,6 +57,17 @@ export const HeaderNavUno = [
         id: 9,
         name: "tt",
         logo: tt,
+    },
+    {
+        id: 10,
+        name: "ray",
+        logo: ray, 
+    },
+    {
+        id: 11,
+        name: "piero",
+        logo: piero, 
     }
+    
 
 ]

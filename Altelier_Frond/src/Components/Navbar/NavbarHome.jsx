@@ -1,5 +1,4 @@
-'use client'
-
+import { HeaderNavUno } from '../../assets/HeaderNav/HeaderNav'
 import LogoScroll from '../../assets/LogosScroll/LogoScroll'
 import { Fragment, useState } from 'react'
 import {
@@ -22,19 +21,19 @@ const navigation = {
   categories: [
     {
       id: 'women',
-      name: 'Women',
+      name: 'Baristas',
       featured: [
         {
-          name: 'New Arrivals',
+          name: 'Baristas Expertos',
           href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-01.jpg',
-          imageAlt: 'Models sitting back to back, wearing Basic Tee in black and bone.',
+          imageSrc: HeaderNavUno[0].logo,
+          imageAlt: HeaderNavUno[0].name,
         },
         {
-          name: 'Basic Tees',
+          name: 'Talleres',
           href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/mega-menu-category-02.jpg',
-          imageAlt: 'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.',
+          imageSrc: HeaderNavUno[1].logo,
+          imageAlt: HeaderNavUno[1].name,
         },
       ],
       sections: [
@@ -80,22 +79,20 @@ const navigation = {
     },
     {
       id: 'men',
-      name: 'Men',
+      name: 'Productores',
       featured: [
         {
           name: 'New Arrivals',
           href: '#',
-          imageSrc:
-            'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg',
-          imageAlt: 'Drawstring top with elastic loop closure and textured interior padding.',
-        },
+          imageSrc: HeaderNavUno[10].logo,
+          imageAlt: HeaderNavUno[10].name,
+         },
         {
           name: 'Artwork Tees',
           href: '#',
-          imageSrc: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/category-page-02-image-card-06.jpg',
-          imageAlt:
-            'Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.',
-        },
+          imageSrc: HeaderNavUno[9].logo,
+          imageAlt: HeaderNavUno[9].name,   
+             },
       ],
       sections: [
         {
@@ -137,8 +134,8 @@ const navigation = {
     },
   ],
   pages: [
-    { name: 'Company', href: '#' },
-    { name: 'Stores', href: '#' },
+    { name: 'Cafeterias', href: 'Cafeterias' },
+    { name: 'tienda', href: 'Tienda' },
   ],
 }
 
@@ -148,7 +145,7 @@ export default function NavbarHome() {
   return (
     <div className="bg-white">
       {/* Mobile menu */}
-      <Dialog open={open} onClose={setOpen} className="relative z-40 lg:hidden">
+      <Dialog open={open} onClose={setOpen} className="relative z-50 lg:hidden">
         <DialogBackdrop
           transition
           className="fixed inset-0 bg-black/25 transition-opacity duration-300 ease-linear data-closed:opacity-0"
@@ -249,7 +246,7 @@ export default function NavbarHome() {
               </div>
               <div className="flow-root">
                 <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
-                  Create account
+                  Create 
                 </a>
               </div>
             </div>
@@ -269,7 +266,7 @@ export default function NavbarHome() {
         </div>
       </Dialog>
 
-      <header className="relative bg-white">
+      <header className="fixed top-0 left-0 right-0 z-40 bg-white w-full">
         <p className="flex h-10 items-center justify-center bg-indigo-600 px-4 text-sm font-medium text-white sm:px-6 lg:px-8">
           Recive gratis tu primer taller o bolsa de cafe por registrate
         </p>
@@ -426,6 +423,9 @@ export default function NavbarHome() {
           </div>
         </nav>
       </header>
+
+      {/* Add this div to create space for the fixed header */}
+      <div className="h-[104px]"></div>
     </div>
   )
 }

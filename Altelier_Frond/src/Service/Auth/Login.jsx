@@ -1,192 +1,190 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { FcGoogle } from 'react-icons/fc';
+import { FaGithub, FaFacebook } from 'react-icons/fa';
 
-export default function AuthForm() {
-  const [isLogin, setIsLogin] = useState(true);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
-  });
-  const [errors, setErrors] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+const Login = () => {
+  const [nombre, setNombre] = useState('');
+  const [telefono, setTelefono] = useState('');
+  const [rol, setRol] = useState('');
+  const [email, setEmail] = useState('');
+  const [contrasena, setContrasena] = useState('');
+  const [confirmarContrasena, setConfirmarContrasena] = useState('');
+  const [isRegistering, setIsRegistering] = useState(false);
   const navigate = useNavigate();
 
-  const toggleAuthMode = () => {
-    setIsLogin(!isLogin);
-    setErrors({});
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const validate = () => {
-    const newErrors = {};
-    
-    if (!isLogin && !formData.name) newErrors.name = 'Name is required';
-    
-    if (!formData.email) newErrors.email = 'Email is required';
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
-    
-    if (!formData.password) newErrors.password = 'Password is required';
-    else if (formData.password.length < 6) newErrors.password = 'Password must be at least 6 characters';
-    
-    if (!isLogin && formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (!validate()) return;
-
-    setIsLoading(true);
-    
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      console.log(isLogin ? 'Login successful' : 'Registration successful', formData);
-      navigate('/dashboard');
+      const response = await axios.post('http://localhost:3000/login', {
+        email,
+        contraseña: contrasena,
+      });
+      alert(response.data.mensaje);
+      localStorage.setItem('token', response.data.token);
+      navigate('/home');
     } catch (error) {
-      setErrors({ api: error.message });
-    } finally {
-      setIsLoading(false);
+      alert(error.response?.data?.mensaje || 'Error al iniciar sesión');
     }
+    setEmail('');
+    setContrasena('');
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    if (contrasena !== confirmarContrasena) {
+      alert('Las contraseñas no coinciden.');
+      return;
+    }
+    try {
+      const response = await axios.post('http://localhost:3000/registro', {
+        nombre,
+        telefono,
+        rol,
+        email,
+        contraseña: contrasena,
+      });
+      alert(response.data.mensaje);
+      setIsRegistering(false);
+    } catch (error) {
+      alert(error.response?.data?.mensaje || 'Error al registrarse');
+    }
+    setNombre('');
+    setTelefono('');
+    setRol('');
+    setEmail('');
+    setContrasena('');
+    setConfirmarContrasena('');
   };
 
   return (
-    <div className={`auth-container ${isLogin ? 'login-mode' : 'register-mode'}`}>
-      <div className="auth-card">
-        <div className="auth-header">
-          <h2>{isLogin ? 'Welcome back' : 'Create account'}</h2>
-          <p>{isLogin ? 'Please enter your details' : 'Join us today'}</p>
-        </div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-300 p-4">
+      <div className="w-full max-w-md bg-white shadow-xl rounded-2xl p-8">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+          {isRegistering ? 'Regístrate' : 'Iniciar Sesión'}
+        </h2>
 
-        <form onSubmit={handleSubmit} className="auth-form">
-          {errors.api && <div className="error-message">{errors.api}</div>}
-          
-          {!isLogin && (
-            <div className="form-group">
-              <label htmlFor="name">Full Name</label>
+        <form onSubmit={isRegistering ? handleRegister : handleLogin} className="space-y-4">
+          {isRegistering && (
+            <>
               <input
                 type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className={errors.name ? 'error' : ''}
-                placeholder="Enter your full name"
+                placeholder="Nombre completo"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                required
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              {errors.name && <span className="error-message">{errors.name}</span>}
-            </div>
-          )}
-
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className={errors.email ? 'error' : ''}
-              placeholder="Enter your email"
-            />
-            {errors.email && <span className="error-message">{errors.email}</span>}
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <div className="password-input">
               <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className={errors.password ? 'error' : ''}
-                placeholder="Enter your password"
+                type="tel"
+                placeholder="Número de celular"
+                value={telefono}
+                onChange={(e) => setTelefono(e.target.value)}
+                required
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <button 
-                type="button" 
-                className="show-password"
-                onClick={() => setShowPassword(!showPassword)}
+              <select
+                value={rol}
+                onChange={(e) => setRol(e.target.value)}
+                required
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                {showPassword ? '👁️' : '👁️‍🗨️'}
-              </button>
-            </div>
-            {errors.password && <span className="error-message">{errors.password}</span>}
-          </div>
-
-          {!isLogin && (
-            <div className="form-group">
-              <label htmlFor="confirmPassword">Confirm Password</label>
-              <input
-                type={showPassword ? "text" : "password"}
-                id="confirmPassword"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className={errors.confirmPassword ? 'error' : ''}
-                placeholder="Confirm your password"
-              />
-              {errors.confirmPassword && (
-                <span className="error-message">{errors.confirmPassword}</span>
-              )}
-            </div>
+                <option value="">Selecciona tu rol</option>
+                <option value="barista">Barista</option>
+                <option value="estudiante">Estudiante de cafés especiales</option>
+                <option value="productor">Productor</option>
+                <option value="catador">Catador</option>
+                <option value="tostador">Tostador</option>
+                <option value="dueño">Dueño de cafetería</option>
+                <option value="empresa">Empresa que vende cafés especiales</option>
+                <option value="amante">Amante del café</option>
+              </select>
+            </>
           )}
 
-          {isLogin && (
-            <div className="form-options">
-              <label className="remember-me">
-                <input type="checkbox" /> Remember me
-              </label>
-              <a href="/forgot-password" className="forgot-password">Forgot password?</a>
-            </div>
+          <input
+            type="email"
+            placeholder="Correo electrónico"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          <input
+            type="password"
+            placeholder="Contraseña"
+            value={contrasena}
+            onChange={(e) => setContrasena(e.target.value)}
+            required
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+
+          {isRegistering && (
+            <input
+              type="password"
+              placeholder="Confirmar Contraseña"
+              value={confirmarContrasena}
+              onChange={(e) => setConfirmarContrasena(e.target.value)}
+              required
+              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
           )}
 
-          <button type="submit" className="auth-button" disabled={isLoading}>
-            {isLoading ? (
-              <span className="spinner"></span>
-            ) : (
-              isLogin ? 'Sign in' : 'Sign up'
-            )}
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300"
+          >
+            {isRegistering ? 'Registrarse' : 'Iniciar Sesión'}
           </button>
         </form>
 
-        <div className="auth-footer">
-          <p>
-            {isLogin ? "Don't have an account?" : "Already have an account?"}
-            <button type="button" className="toggle-auth" onClick={toggleAuthMode}>
-              {isLogin ? ' Sign up' : ' Sign in'}
-            </button>
-          </p>
+        <div className="my-6 text-center text-sm text-gray-500">
+          O {isRegistering ? 'regístrate' : 'continúa'} con
         </div>
 
-        <div className="social-auth">
-          <p>Or continue with</p>
-          <div className="social-buttons">
-            <button className="social-button google">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" />
-            </button>
-            <button className="social-button github">
-              <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" />
-            </button>
-            <button className="social-button apple">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple" />
-            </button>
-          </div>
+        <div className="flex justify-between gap-4">
+          <button className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-100 transition">
+            <FcGoogle size={20} />
+            Google
+          </button>
+          <button className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-100 transition text-gray-700">
+            <FaGithub size={20} />
+            GitHub
+          </button>
+          <button className="flex-1 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-100 transition text-blue-600">
+            <FaFacebook size={20} />
+            Facebook
+          </button>
         </div>
+
+        <p className="mt-6 text-center text-sm">
+          {isRegistering ? (
+            <>
+              ¿Ya tienes cuenta?{' '}
+              <button
+                onClick={() => setIsRegistering(false)}
+                className="text-blue-600 hover:underline focus:outline-none"
+              >
+                Iniciar Sesión
+              </button>
+            </>
+          ) : (
+            <>
+              ¿No tienes cuenta?{' '}
+              <button
+                onClick={() => setIsRegistering(true)}
+                className="text-blue-600 hover:underline focus:outline-none"
+              >
+                Regístrate
+              </button>
+            </>
+          )}
+        </p>
       </div>
     </div>
   );
-}
+};
+
+export default Login;
